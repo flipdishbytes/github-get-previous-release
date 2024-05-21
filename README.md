@@ -25,7 +25,7 @@ on:
       - main
 
 permissions:
-  contents: read # grants permissions to create gh releases
+  contents: read # grants permissions to read gh releases
 
 jobs:
   get-previous-version:
