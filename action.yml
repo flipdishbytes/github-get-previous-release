@@ -22,7 +22,7 @@ runs:
             Write-Host "Using provided version to rollback: $Version"
             $previousReleaseTag = $Version
           } else {
-            $ghReleasesTags = gh release list --limit 15 --exclude-drafts --exclude-pre-releases --json tagName,isLatest --repo $env:repository | ConvertFrom-Json
+            $ghReleasesTags = gh release list --limit 15 --exclude-drafts --exclude-pre-releases --json tagName,isLatest --repo $env:repositoryName | ConvertFrom-Json
             $latestRelease = $ghReleasesTags | Where-Object { $_.isLatest -eq $true }
             Write-Host "Getting previous version to rollback"
             $latestReleaseIndex = $ghReleasesTags.IndexOf($latestRelease)
