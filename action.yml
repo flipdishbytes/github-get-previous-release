@@ -7,10 +7,10 @@ inputs:
   version:
     description: 'Version of the release'
     required: false
-
 outputs:
   previousReleaseTag:
     description: "Previous release tag"
+    value: ${{ steps.previous_version.outputs.previousReleaseTag }}
 
 permissions:
   contents: write
@@ -19,6 +19,7 @@ runs:
   using: "composite"
   steps:
     - name: Get previous version
+      id: previous_version
       run: |
           $Version = $env:Version
           if ($Version) {
