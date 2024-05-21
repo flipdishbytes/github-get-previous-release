@@ -13,11 +13,8 @@ permissions:
 
 runs:
   using: "composite"
-  outputs:
-      previousReleaseTag: ${{ steps.previous_version.outputs.previousReleaseTag }}
   steps:
     - name: Get previous version
-      id: previous_version
       run: |
           $Version = $env:Version
           if ($Version) {
