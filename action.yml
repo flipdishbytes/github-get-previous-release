@@ -1,0 +1,38 @@
+name: 'Github get previous Release'
+description: 'If version is provided it outputs the same version, else it gets the previous release tag ans set outpit variable called previousReleaseTag'
+inputs:
+  repositoryName:
+    description: 'Name of the repository'
+    required: true
+  version:
+    description: 'Version of the release'
+    required: false
+
+permissions:
+  contents: read
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get previous version
+      id: previous_version
+      run: |
+          $Version = $env:Version
+          if ($Version) {
+            Write-Host "Using provided version to rollback: $Version"
+            $previousReleaseTag = $Version
+          } else {
+            $ghReleasesTags = gh release list --limit 15 --exclude-drafts --exclude-pre-releases --json tagName,isLatest --repo $env:repository | ConvertFrom-Json
+            $latestRelease = $ghReleasesTags | Where-Object { $_.isLatest -eq $true }
+            Write-Host "Getting previous version to rollback"
+            $latestReleaseIndex = $ghReleasesTags.IndexOf($latestRelease)
+            $previousRelease = $ghReleasesTags[$latestReleaseIndex + 1]
+            $previousReleaseTag = $previousRelease.tagName
+          }
+          Write-Host "Previous Release Tag: $previousReleaseTag"
+          "previousReleaseTag=$previousReleaseTag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+      shell: pwsh
+      env:
+        GH_TOKEN: ${{ github.token }}
+        Version: ${{ inputs.version }}
+        repositoryName: ${{ github.repository }}
