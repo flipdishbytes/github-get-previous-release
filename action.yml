@@ -9,7 +9,7 @@ inputs:
     required: false
 
 permissions:
-  contents: read
+  contents: write
 
 runs:
   using: "composite"
