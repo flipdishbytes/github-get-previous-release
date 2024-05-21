@@ -35,4 +35,4 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
         Version: ${{ inputs.version }}
-        repositoryName: ${{ github.repository }}
+        repositoryName: ${{ inputs.repositoryName }}
