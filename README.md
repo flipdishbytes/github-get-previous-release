@@ -28,13 +28,30 @@ permissions:
   contents: read # grants permissions to create gh releases
 
 jobs:
-  deploy:
+  get-previous-version:
     runs-on: ubuntu-latest
-
+    outputs:
+      previousReleaseTag: ${{ steps.previous_version.outputs.previousReleaseTag }}
     steps:
       - name: Get previous version
+        id: previous_version
         uses: flipdishbytes/github-get-previous-release@v1.0
         with:
           repositoryName: ${{ github.repository }}
 
+  deploy-previous-version:
+    runs-on: ubuntu-latest
+    needs:
+      - get-previous-version
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.get-previous-version.outputs.previousReleaseTag }} # checkout the previous release tag
+      
+      - name: Echo the previousReleaseTag
+        run: echo $VERSION
+        env:
+          VERSION: ${{ needs.get-previous-version.outputs.previousReleaseTag }}
 ```
