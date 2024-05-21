@@ -38,6 +38,11 @@ jobs:
         uses: flipdishbytes/github-get-previous-release@v1.0
         with:
           repositoryName: ${{ github.repository }}
+      
+      - name: Echo the value
+        run: echo $VERSION
+        env:
+          VERSION: ${{ steps.previous_version.outputs.previousReleaseTag }}
 
   deploy-previous-version:
     runs-on: ubuntu-latest
