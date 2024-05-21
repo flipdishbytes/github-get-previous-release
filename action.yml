@@ -8,6 +8,10 @@ inputs:
     description: 'Version of the release'
     required: false
 
+outputs:
+  previousReleaseTag:
+    description: "Previous release tag"
+
 permissions:
   contents: write
 
